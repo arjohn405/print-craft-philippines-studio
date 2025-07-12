@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { 
   BarChart3, Users, Mail, FileText, Eye, EyeOff, 
-  Download, Search, Filter, Calendar, Trash2 
+  Download, Search, Filter, Calendar, Trash2, ExternalLink, Send
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { QuotationDetailModal } from '@/components/quotation-detail-modal';
 
 interface QuotationRequest {
   id: string;
@@ -39,6 +40,8 @@ export const Dashboard = () => {
   const [emailSubscriptions, setEmailSubscriptions] = useState<EmailSubscription[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState<'quotations' | 'emails'>('quotations');
+  const [selectedRequest, setSelectedRequest] = useState<QuotationRequest | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const { toast } = useToast();
 
   // Simple authentication - in production, use proper authentication
@@ -98,23 +101,52 @@ export const Dashboard = () => {
     });
   };
 
-  const exportData = (type: 'quotations' | 'emails') => {
+  const exportToCSV = (type: 'quotations' | 'emails') => {
     const data = type === 'quotations' ? quotationRequests : emailSubscriptions;
-    const jsonString = JSON.stringify(data, null, 2);
-    const blob = new Blob([jsonString], { type: 'application/json' });
+    
+    if (data.length === 0) {
+      toast({
+        title: "No Data to Export",
+        description: `No ${type} found to export.`,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    let csvContent = '';
+    
+    if (type === 'quotations') {
+      // CSV headers for quotations
+      csvContent = 'Name,Email,Phone,Company,Product Type,Quantity,Timeline,Budget,Date,Status\n';
+      
+      // CSV rows
+      quotationRequests.forEach(req => {
+        csvContent += `"${req.fullName}","${req.email}","${req.phone}","${req.company || ''}","${req.productType}","${req.quantity}","${req.timeline}","${req.budget || ''}","${new Date(req.timestamp).toLocaleDateString()}","${req.status}"\n`;
+      });
+    } else {
+      // CSV headers for emails
+      csvContent = 'Email,Source,Date Subscribed\n';
+      
+      // CSV rows
+      emailSubscriptions.forEach(sub => {
+        csvContent += `"${sub.email}","${sub.source}","${new Date(sub.timestamp).toLocaleDateString()}"\n`;
+      });
+    }
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${type}-${new Date().toISOString().split('T')[0]}.json`;
+    link.download = `${type}-export-${new Date().toISOString().split('T')[0]}.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
     toast({
-      title: "Data Exported",
-      description: `${type} data has been downloaded.`,
+      title: "CSV Exported Successfully",
+      description: `${type} data has been exported to CSV format.`,
     });
   };
 
@@ -284,10 +316,10 @@ export const Dashboard = () => {
                 </div>
                 <Button 
                   variant="outline" 
-                  onClick={() => exportData(activeTab)}
+                  onClick={() => exportToCSV(activeTab)}
                 >
                   <Download className="w-4 h-4 mr-2" />
-                  Export
+                  Export CSV
                 </Button>
               </div>
             </div>
@@ -310,30 +342,60 @@ export const Dashboard = () => {
                   </TableHeader>
                   <TableBody>
                     {filteredQuotations.map((request) => (
-                      <TableRow key={request.id}>
+                      <TableRow 
+                        key={request.id} 
+                        className="cursor-pointer hover:bg-muted/50 transition-colors"
+                        onClick={() => {
+                          setSelectedRequest(request);
+                          setIsDetailModalOpen(true);
+                        }}
+                      >
                         <TableCell>
-                          <div>
-                            <div className="font-medium">{request.fullName}</div>
-                            <div className="text-sm text-muted-foreground">{request.email}</div>
+                          <div className="flex items-center space-x-2">
+                            <div>
+                              <div className="font-medium flex items-center">
+                                {request.fullName}
+                                <ExternalLink className="w-3 h-3 ml-1 text-muted-foreground" />
+                              </div>
+                              <div className="text-sm text-muted-foreground">{request.email}</div>
+                            </div>
                           </div>
                         </TableCell>
                         <TableCell>{request.company || 'N/A'}</TableCell>
                         <TableCell>
                           <Badge variant="outline">{request.productType}</Badge>
                         </TableCell>
-                        <TableCell>{request.quantity}</TableCell>
+                        <TableCell>{request.quantity.toLocaleString()}</TableCell>
                         <TableCell>{request.budget || 'N/A'}</TableCell>
                         <TableCell>
                           {new Date(request.timestamp).toLocaleDateString()}
                         </TableCell>
                         <TableCell>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => deleteQuotation(request.id)}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
+                          <div className="flex space-x-1">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedRequest(request);
+                                setIsDetailModalOpen(true);
+                              }}
+                              title="View Details & Reply"
+                            >
+                              <Send className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteQuotation(request.id);
+                              }}
+                              title="Delete"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -345,6 +407,12 @@ export const Dashboard = () => {
                     No quotation requests found.
                   </div>
                 )}
+
+                <div className="mt-4 p-4 bg-muted/30 rounded-lg">
+                  <p className="text-sm text-muted-foreground">
+                    💡 <strong>Tip:</strong> Click on any row to view full details and send email replies to customers.
+                  </p>
+                </div>
               </div>
             ) : (
               <div className="space-y-4">
@@ -390,6 +458,16 @@ export const Dashboard = () => {
             )}
           </CardContent>
         </Card>
+
+        {/* Quotation Detail Modal */}
+        <QuotationDetailModal
+          request={selectedRequest}
+          isOpen={isDetailModalOpen}
+          onClose={() => {
+            setIsDetailModalOpen(false);
+            setSelectedRequest(null);
+          }}
+        />
       </div>
     </div>
   );

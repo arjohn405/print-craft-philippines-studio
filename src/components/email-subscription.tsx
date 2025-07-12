@@ -43,7 +43,7 @@ export const EmailSubscription = () => {
       if (emailExists) {
         toast({
           title: "Already Subscribed",
-          description: "This email is already subscribed to our newsletter.",
+          description: "This email is already subscribed to our daily promotions.",
           variant: "destructive"
         });
         setIsSubmitting(false);
@@ -53,9 +53,12 @@ export const EmailSubscription = () => {
       existingSubscriptions.push(subscriptionData);
       localStorage.setItem('emailSubscriptions', JSON.stringify(existingSubscriptions));
 
+      // Simulate sending welcome email and setting up daily promotions
+      console.log('Setting up daily promotions for:', email);
+      
       toast({
         title: "Successfully Subscribed!",
-        description: "Thank you for subscribing to our newsletter. You'll receive updates about our latest products and offers.",
+        description: "Welcome to daily promotions! You'll receive exclusive offers and deals every day starting tomorrow.",
       });
 
       setEmail('');
@@ -81,11 +84,11 @@ export const EmailSubscription = () => {
               
               <div className="space-y-2">
                 <h3 className="text-2xl md:text-3xl font-bold text-business-dark">
-                  Stay Updated with Our Latest Offers
+                  Subscribe to Daily Promotions
                 </h3>
                 <p className="text-lg text-muted-foreground">
-                  Subscribe to our newsletter and be the first to know about new products, 
-                  special discounts, and exclusive deals.
+                  Get exclusive daily promotions and special offers delivered straight to your inbox. 
+                  Be the first to know about flash sales, new product launches, and member-only discounts.
                 </p>
               </div>
 
@@ -122,7 +125,7 @@ export const EmailSubscription = () => {
                   </div>
                   
                   <p className="text-xs text-muted-foreground">
-                    We respect your privacy. Unsubscribe at any time.
+                    Join 500+ customers getting daily deals. We respect your privacy. Unsubscribe at any time.
                   </p>
                 </form>
               )}
@@ -130,16 +133,16 @@ export const EmailSubscription = () => {
               {/* Benefits */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 pt-8 border-t border-border">
                 <div className="text-center">
-                  <div className="text-lg font-semibold text-business-dark mb-1">Exclusive Discounts</div>
-                  <div className="text-sm text-muted-foreground">Special offers just for subscribers</div>
+                  <div className="text-lg font-semibold text-business-dark mb-1">Daily Deals</div>
+                  <div className="text-sm text-muted-foreground">Fresh promotions delivered daily</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-lg font-semibold text-business-dark mb-1">New Products</div>
-                  <div className="text-sm text-muted-foreground">Be first to see our latest items</div>
+                  <div className="text-lg font-semibold text-business-dark mb-1">Flash Sales</div>
+                  <div className="text-sm text-muted-foreground">Limited-time offers up to 50% off</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-lg font-semibold text-business-dark mb-1">Monthly Updates</div>
-                  <div className="text-sm text-muted-foreground">Only valuable content, no spam</div>
+                  <div className="text-lg font-semibold text-business-dark mb-1">Member Exclusive</div>
+                  <div className="text-sm text-muted-foreground">Subscriber-only pricing & products</div>
                 </div>
               </div>
             </div>
