@@ -61,7 +61,25 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				/* Custom Brand Colors */
+				brand: {
+					primary: 'hsl(var(--brand-primary))',
+					secondary: 'hsl(var(--brand-secondary))'
+				},
+				business: {
+					dark: 'hsl(var(--business-dark))',
+					light: 'hsl(var(--business-light))'
+				},
+				success: 'hsl(var(--success))',
+				warning: 'hsl(var(--warning))'
+			},
+			backgroundImage: {
+				'brand-gradient': 'var(--brand-gradient)',
+				'hero-bg': 'var(--hero-bg)'
+			},
+			boxShadow: {
+				'brand': 'var(--brand-shadow)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
