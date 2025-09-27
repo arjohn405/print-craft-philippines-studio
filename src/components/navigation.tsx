@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, X, ShoppingBag } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const Navigation = () => {
@@ -19,8 +19,8 @@ export const Navigation = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-brand-gradient rounded-lg flex items-center justify-center">
-              <ShoppingBag className="w-5 h-5 text-primary-foreground" />
+            <div className="w-8 h-8 rounded-lg overflow-hidden">
+              <img src="/logo.png" alt="JCR Printing Services Logo" className="w-full h-full object-contain"/>
             </div>
             <span className="text-xl font-bold text-business-dark">JCR Printing Services</span>
           </div>
