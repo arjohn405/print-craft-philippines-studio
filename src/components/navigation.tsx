@@ -22,7 +22,7 @@ export const Navigation = () => {
             <div className="w-8 h-8 bg-brand-gradient rounded-lg flex items-center justify-center">
               <ShoppingBag className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold text-business-dark">PrintPro Philippines</span>
+            <span className="text-xl font-bold text-business-dark">JCR Printing Services</span>
           </div>
 
           {/* Desktop Navigation */}
