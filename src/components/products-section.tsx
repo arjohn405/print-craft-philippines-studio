@@ -4,6 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import productsImage from '@/assets/products-showcase.jpg';
+import notebooksImage from '@/assets/notebook.jpg';
+import shirtImage from '@/assets/shirt.jpg';
+
 
 type ProductCategory = 'all' | 'notebooks' | 'pens' | 'apparel';
 
@@ -26,7 +29,7 @@ export const ProductsSection = () => {
       name: 'Custom Notebooks',
       category: 'notebooks',
       startingPrice: 120,
-      image: productsImage,
+      image: notebooksImage,
       features: ['A4/A5 sizes', 'Custom covers', 'Logo embossing', 'Bulk orders'],
       popular: true
     },
@@ -43,7 +46,7 @@ export const ProductsSection = () => {
       name: 'Custom T-Shirts',
       category: 'apparel',
       startingPrice: 280,
-      image: productsImage,
+      image: shirtImage,
       features: ['Premium cotton', 'DTG printing', 'All sizes', 'Color options'],
       popular: true
     },

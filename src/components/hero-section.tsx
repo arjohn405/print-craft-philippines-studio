@@ -1,7 +1,7 @@
 import { ArrowRight, Star, Users, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { QuotationCalculator } from './quotation-calculator';
-import heroImage from '@/assets/hero-printing.jpg';
+import heroImage from '@/assets/header2.png';
 
 export const HeroSection = () => {
   const scrollToSection = (sectionId: string) => {
@@ -49,7 +49,7 @@ export const HeroSection = () => {
                 <div className="w-12 h-12 bg-brand-gradient rounded-lg flex items-center justify-center mx-auto mb-2">
                   <Award className="w-6 h-6 text-primary-foreground" />
                 </div>
-                <div className="text-2xl font-bold text-business-dark">100%</div>
+                <div className="text-2xl font-bold text-business-dark">95%</div>
                 <div className="text-sm text-muted-foreground">Quality Guarantee</div>
               </div>
             </div>
