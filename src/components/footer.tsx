@@ -19,21 +19,30 @@ export const Footer = () => {
               <div className="w-8 h-8 bg-brand-gradient rounded-lg flex items-center justify-center">
                 <span className="text-primary-foreground font-bold">P</span>
               </div>
-              <span className="text-xl font-bold">PrintPro Philippines</span>
+              <span className="text-xl font-bold">JCR Printing Services</span>
             </div>
             <p className="text-gray-300">
               Your trusted partner for premium custom merchandise. 
               Quality printing services since 2020.
             </p>
             <div className="flex space-x-4">
-              <Button variant="ghost" size="sm" className="text-white hover:text-primary">
-                <Facebook className="w-5 h-5" />
+              <Button 
+                variant="ghost" size="sm" className="text-white hover:text-primary" asChild>
+                <a href="https://facebook.com/jcrprintingservices" target="_blank" rel="noopener noreferrer">
+                  <Facebook className="w-5 h-5" />
+                </a>
               </Button>
-              <Button variant="ghost" size="sm" className="text-white hover:text-primary">
-                <Instagram className="w-5 h-5" />
+              <Button 
+              variant="ghost" size="sm" className="text-white hover:text-primary" asChild>
+                <a href="https://instagram.com/jcrprintingservices" target="_blank" rel="noopener noreferrer">
+                  <Instagram className="w-5 h-5" />
+                </a>
               </Button>
-              <Button variant="ghost" size="sm" className="text-white hover:text-primary">
-                <Twitter className="w-5 h-5" />
+              <Button 
+           variant="ghost" size="sm" className="text-white hover:text-primary" asChild>
+                <a href="https://twitter.com/jcrprintingservices" target="_blank" rel="noopener noreferrer">
+                  <Twitter className="w-5 h-5" />
+                </a>
               </Button>
             </div>
           </div>
@@ -96,15 +105,15 @@ export const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-primary" />
-                <span className="text-gray-300">+63 917 XXX XXXX</span>
+                <span className="text-gray-300">+63 992 558 3465</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-primary" />
-                <span className="text-gray-300">info@printprophilippines.com</span>
+                <span className="text-gray-300">jcr.creativeprints@gmail.com</span>
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin className="w-5 h-5 text-primary" />
-                <span className="text-gray-300">Makati City, Metro Manila</span>
+                <span className="text-gray-300">1731 Bulacan St. Sta Cruz, Metro Manila</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Clock className="w-5 h-5 text-primary" />
@@ -118,7 +127,7 @@ export const Footer = () => {
         <div className="border-t border-gray-700 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-gray-300 text-sm">
-              © 2024 PrintPro Philippines. All rights reserved.
+              © 2024 JCR Printing Services. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm text-gray-300">
               <span className="hover:text-primary cursor-pointer">Privacy Policy</span>
