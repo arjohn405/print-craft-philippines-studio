@@ -19,7 +19,8 @@ export const Footer = () => {
               <div className="w-8 h-8 bg-brand-gradient rounded-lg flex items-center justify-center">
                 <span className="text-primary-foreground font-bold">P</span>
               </div>
-              <span className="text-xl font-bold">JCR Printing Services</span>
+              {/* <span className="text-xl font-bold">JCR Printing Services</span> */}
+              <span className="text-xl font-bold">Print Craft Philippines</span>
             </div>
             <p className="text-gray-300">
               Your trusted partner for premium custom merchandise. 
@@ -109,7 +110,8 @@ export const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-primary" />
-                <span className="text-gray-300">jcr.creativeprints@gmail.com</span>
+                {/* <span className="text-gray-300">jcr.creativeprints@gmail.com</span> */}
+                <span className="text-gray-300">print.craftphilippines@gmail.com</span>
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin className="w-5 h-5 text-primary" />
@@ -126,8 +128,11 @@ export const Footer = () => {
         {/* Bottom Section */}
         <div className="border-t border-gray-700 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-gray-300 text-sm">
+            {/* <div className="text-gray-300 text-sm">
               © 2024 JCR Printing Services. All rights reserved.
+            </div> */}
+                   <div className="text-gray-300 text-sm">
+              © 2024 Print Craft Philippines. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm text-gray-300">
               <span className="hover:text-primary cursor-pointer">Privacy Policy</span>

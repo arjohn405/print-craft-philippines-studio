@@ -22,7 +22,9 @@ export const Navigation = () => {
             <div className="w-8 h-8 rounded-lg overflow-hidden">
               <img src="/logo.png" alt="JCR Printing Services Logo" className="w-full h-full object-contain"/>
             </div>
-            <span className="text-xl font-bold text-business-dark">JCR Printing Services</span>
+            {/* <span className="text-xl font-bold text-business-dark">JCR Printing Services</span> */}
+            <span className="text-xl font-bold text-business-dark">Print Craft Philippines</span>
+
           </div>
 
           {/* Desktop Navigation */}
