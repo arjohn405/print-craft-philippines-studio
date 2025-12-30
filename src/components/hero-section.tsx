@@ -25,7 +25,7 @@ export const HeroSection = () => {
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed">
                 Premium custom printing services for notebooks, pens, shirts, and jackets. 
-                Transform your brand vision into high-quality merchandise that makes an impact.
+                Transform your brand vision into high-quality merchandise that makes an impact. In collaboration with <span className="text-l md:text-l font-bold text-business-dark leading-tight">JCR Creatives.</span>
               </p>
             </div>
 
