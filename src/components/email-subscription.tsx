@@ -11,7 +11,7 @@ export const EmailSubscription = () => {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!email || !email.includes('@')) {
@@ -25,21 +25,37 @@ export const EmailSubscription = () => {
 
     setIsSubmitting(true);
 
-    // Simulate submission delay
-    setTimeout(() => {
-      // Store in localStorage for owner dashboard
-      const subscriptionData = {
+    const endpoint = 'https://formspree.io/f/mjgvnawy';
+
+    try {
+      const payload = new FormData();
+      payload.append('email', email);
+      payload.append('_replyto', email);
+      payload.append('_subject', 'New email subscription');
+
+      const resp = await fetch(endpoint, {
+        method: 'POST',
+        body: payload,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      // Prepare local record
+      const subscriptionData: any = {
         email,
         timestamp: new Date().toISOString(),
         id: Date.now().toString(),
-        source: 'website'
+        source: 'website',
+        status: resp.ok ? 'submitted' : 'pending',
+        attempts: resp.ok ? 1 : 0
       };
 
       const existingSubscriptions = JSON.parse(localStorage.getItem('emailSubscriptions') || '[]');
-      
+
       // Check if email already exists
       const emailExists = existingSubscriptions.some((sub: any) => sub.email === email);
-      
+
       if (emailExists) {
         toast({
           title: "Already Subscribed",
@@ -53,23 +69,56 @@ export const EmailSubscription = () => {
       existingSubscriptions.push(subscriptionData);
       localStorage.setItem('emailSubscriptions', JSON.stringify(existingSubscriptions));
 
-      // Simulate sending welcome email and setting up daily promotions
-      console.log('Setting up daily promotions for:', email);
-      
+      if (resp.ok) {
+        toast({
+          title: "Successfully Subscribed!",
+          description: "Welcome! You'll receive exclusive offers and deals via email.",
+        });
+
+        setEmail('');
+        setIsSubscribed(true);
+
+        // Reset success state after 3 seconds
+        setTimeout(() => {
+          setIsSubscribed(false);
+        }, 3000);
+      } else {
+        let msg = 'There was a problem saving your subscription. It was saved locally and will be retried later.';
+        try {
+          const data = await resp.json();
+          if (data?.error) msg = data.error;
+        } catch (err) {}
+
+        toast({
+          title: "Subscription saved locally",
+          description: msg,
+          variant: "destructive"
+        });
+      }
+    } catch (err) {
+      console.error(err);
+
+      const subscriptionData: any = {
+        email,
+        timestamp: new Date().toISOString(),
+        id: Date.now().toString(),
+        source: 'website',
+        status: 'pending',
+        attempts: 0
+      };
+
+      const existingSubscriptions = JSON.parse(localStorage.getItem('emailSubscriptions') || '[]');
+      existingSubscriptions.push(subscriptionData);
+      localStorage.setItem('emailSubscriptions', JSON.stringify(existingSubscriptions));
+
       toast({
-        title: "Successfully Subscribed!",
-        description: "Welcome to daily promotions! You'll receive exclusive offers and deals every day starting tomorrow.",
+        title: "Network error",
+        description: "Could not send your subscription. It was saved locally and will be retried later.",
+        variant: "destructive"
       });
-
-      setEmail('');
-      setIsSubscribed(true);
+    } finally {
       setIsSubmitting(false);
-
-      // Reset success state after 3 seconds
-      setTimeout(() => {
-        setIsSubscribed(false);
-      }, 3000);
-    }, 1000);
+    }
   };
 
   return (

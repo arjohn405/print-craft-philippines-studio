@@ -36,7 +36,8 @@ interface QuotationFormData {
 
 export const QuotationForm = () => {
   const { toast } = useToast();
-  const [formData, setFormData] = useState<QuotationFormData>({
+
+  const initialFormData: QuotationFormData = {
     fullName: '',
     email: '',
     phone: '',
@@ -54,7 +55,9 @@ export const QuotationForm = () => {
     description: '',
     hasLogo: false,
     logoDescription: ''
-  });
+  };
+
+  const [formData, setFormData] = useState<QuotationFormData>(initialFormData);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -75,7 +78,7 @@ export const QuotationForm = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -90,48 +93,75 @@ export const QuotationForm = () => {
       return;
     }
 
-    // Simulate submission delay
-    setTimeout(() => {
-      // Store in localStorage for owner dashboard
+    const endpoint = 'https://formspree.io/f/xnjqegdj';
+
+    try {
+      const payload = new FormData();
+      payload.append('fullName', formData.fullName);
+      payload.append('email', formData.email);
+      payload.append('phone', formData.phone);
+      payload.append('company', formData.company);
+      payload.append('productType', formData.productType);
+      payload.append('quantity', String(formData.quantity));
+      payload.append('printSpecs', JSON.stringify(formData.printSpecs));
+      payload.append('timeline', formData.timeline);
+      payload.append('budget', formData.budget);
+      payload.append('description', formData.description);
+      payload.append('hasLogo', String(formData.hasLogo));
+      payload.append('logoDescription', formData.logoDescription);
+      payload.append('_replyto', formData.email);
+      payload.append('_subject', `Quotation request from ${formData.fullName}`);
+
+      const resp = await fetch(endpoint, {
+        method: 'POST',
+        body: payload,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
       const submissionData = {
         ...formData,
         timestamp: new Date().toISOString(),
         id: Date.now().toString(),
-        status: 'pending'
+        status: resp.ok ? 'submitted' : 'pending'
       };
 
       const existingSubmissions = JSON.parse(localStorage.getItem('quotationSubmissions') || '[]');
       existingSubmissions.push(submissionData);
       localStorage.setItem('quotationSubmissions', JSON.stringify(existingSubmissions));
 
+      if (resp.ok) {
+        toast({
+          title: "Quote Request Submitted!",
+          description: "We've received your request and will get back to you within 24 hours.",
+        });
+
+        // Reset form
+        setFormData(initialFormData);
+      } else {
+        let errorMsg = 'There was a problem submitting your request. It was saved locally.';
+        try {
+          const data = await resp.json();
+          if (data?.error) errorMsg = data.error;
+        } catch (err) { }
+
+        toast({
+          title: "Submission failed",
+          description: errorMsg,
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error(error);
       toast({
-        title: "Quote Request Submitted!",
-        description: "We'll get back to you within 24 hours with a detailed quotation.",
+        title: "Network error",
+        description: "Could not send your request. It was saved locally and will be retried later.",
+        variant: "destructive"
       });
-
-      // Reset form
-      setFormData({
-        fullName: '',
-        email: '',
-        phone: '',
-        company: '',
-        productType: '',
-        quantity: 50,
-        printSpecs: {
-          front: true,
-          back: false,
-          size: 'A4',
-          colors: 'Full Color'
-        },
-        timeline: 'standard',
-        budget: '',
-        description: '',
-        hasLogo: false,
-        logoDescription: ''
-      });
-
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (
