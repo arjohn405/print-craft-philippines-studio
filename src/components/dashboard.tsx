@@ -23,7 +23,7 @@ interface QuotationRequest {
   budget: string;
   timestamp: string;
   status: string;
-}
+} 
 
 interface EmailSubscription {
   id: string;
@@ -337,7 +337,7 @@ export const Dashboard = () => {
                       <TableHead>Quantity</TableHead>
                       <TableHead>Budget</TableHead>
                       <TableHead>Date</TableHead>
-                      <TableHead>Actions</TableHead>
+                      <TableHead>Actions</TableHead> 
                     </TableRow>
                   </TableHeader>
                   <TableBody>
