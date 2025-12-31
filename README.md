@@ -71,3 +71,12 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+
+## How to access the build in dashboard?
+
+- Continue Website
+📱 Access Points:
+    * Main Website: Default route (/)
+    * Owner Dashboard: Add /?dashboard=true to URL
+📊 Owner Dashboard
+    * Password-protected access (printpro2024)
